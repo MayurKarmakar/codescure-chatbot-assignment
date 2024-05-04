@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 html {
-  height: 100vh;
+  height: 100%;
   width: 100%;
 }
 
@@ -11,6 +11,11 @@ body {
   scrollbar-width: thin;
   scrollbar-color: #797c7e inherit;
   background-color: #797c7e;
+}
+
+pre {
+  font-family: inherit;
+  white-space: pre-wrap;
 }
 
 *::-webkit-scrollbar {

@@ -1,9 +1,9 @@
 "use client";
 
-import dayjs, { Dayjs } from "dayjs";
-import { LoremIpsum } from "lorem-ipsum";
-import customParseFormat from "dayjs/plugin/customParseFormat";
+import dayjs from "dayjs";
 import advancedFormat from "dayjs/plugin/advancedFormat";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+import { LoremIpsum } from "lorem-ipsum";
 dayjs.extend(customParseFormat);
 dayjs.extend(advancedFormat);
 
@@ -13,20 +13,21 @@ dayjs.extend(advancedFormat);
  * @returns {string} The formatted date string.
  */
 const formatDate = (
-  date: Dayjs,
+  timestamp: number,
   format: string,
   forHeader: boolean
 ): string => {
   if (typeof window === "undefined") return "";
   const today = dayjs();
+  const dateFromTimestamp = dayjs.unix(timestamp);
 
   if (forHeader) {
-    if (today.isSame(date)) {
+    if (today.isSame(dateFromTimestamp, "date")) {
       return "Today";
     }
   }
 
-  return date.format(format);
+  return dateFromTimestamp.format(format);
 };
 
 const lorem = new LoremIpsum({
@@ -41,7 +42,10 @@ const lorem = new LoremIpsum({
 });
 
 function generateRandomSentence() {
-  return lorem.generateSentences(2);
+  const text = lorem.generateSentences(2);
+  const textWithEscapeChars = text.replace(". ", ".\n");
+
+  return textWithEscapeChars;
 }
 
 export { formatDate, generateRandomSentence };

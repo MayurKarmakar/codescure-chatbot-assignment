@@ -2,6 +2,8 @@
 import { Message, messagesSchema } from "@/schemas/zodSchemas";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
+type UseChatMessage = [Message[], Dispatch<SetStateAction<Message[]>>];
+
 function getStoredMessages(): Message[] {
   if (typeof window !== "undefined") {
     const saved = localStorage.getItem("messages");
@@ -10,13 +12,13 @@ function getStoredMessages(): Message[] {
       try {
         json = JSON.parse(saved);
       } catch (e) {
-        console.error(e);
+        console.log("error stored messages:: ", e);
       }
 
       const validated = messagesSchema.safeParse(json);
-
       if (!validated.success) {
-        throw new Error("validation failed for serialized messages");
+        console.warn("validation failed for serialized messages");
+        return [];
       }
 
       return validated.data;
@@ -25,7 +27,7 @@ function getStoredMessages(): Message[] {
   return [];
 }
 
-function useChatMessage(): [Message[], Dispatch<SetStateAction<Message[]>>] {
+function useChatMessage(): UseChatMessage {
   const [messages, setMessages] = useState<Message[]>(() => {
     return getStoredMessages();
   });

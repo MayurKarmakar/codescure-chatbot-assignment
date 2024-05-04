@@ -26,14 +26,18 @@ function Chatbox() {
   async function handleNewMessage(message: Message) {
     const botMessage: Message = {
       text: generateRandomSentence(),
-      date: dayjs(),
+      timestamp: dayjs().unix(),
       from: "bot",
     };
     setMessages([...messages, message, botMessage]);
   }
   return (
-    <div className="flex flex-col h-full border border-[#3c3e42] rounded-md">
-      <ChatHeader />
+    <div className="flex flex-col h-full md:border md:border-[#3c3e42] md:rounded-md">
+      <ChatHeader
+        onNewSession={() => {
+          setMessages([]);
+        }}
+      />
       <ChatMessages messages={messages} ref={messageDivRef} />
       <ChatInput onMessage={handleNewMessage} />
     </div>
